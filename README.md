@@ -7,7 +7,7 @@ A collection of HTML templates that can be used as a starting point when using t
 * [home.html](home.html) - Default home page
 * [page.html](page.html) - Default page
 * [page-sidebar.html](page-sidebar.html) - Page with right sidebar
-* [page-full-width.html](page-full-width.html) - Page that goes full-width
+* [page-full-width.html](page-full-width.html) - Single column page with no side nav
 * [news-single.html](news_single.html) - Default news article
 * [events-single.html](events_single.html) -  Default event detail page
 
