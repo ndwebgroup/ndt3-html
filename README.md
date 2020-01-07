@@ -1,6 +1,6 @@
 # Notre Dame Web Theme HTML Templates
 
-A collection of HTML templates that can be used as a starting point when using the Notre Web Theme.
+A collection of HTML templates that can be used as a starting point when using the Notre Dame Web Theme.
 
 ## Templates
 
