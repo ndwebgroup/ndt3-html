@@ -37,6 +37,7 @@ function fitEmbed(embeds){
 }
 var sources = [
       'iframe[src*="youtube.com"]',
+      'iframe[src*="youtube-nocookie.com"]',
       'iframe[src*="vimeo.com"]'
     ],
     embeds = document.querySelectorAll(sources.join(','))
