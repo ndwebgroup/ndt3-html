@@ -6,7 +6,7 @@
 /*!
  * Responsive wrapper embeds, iframes, etc
  * @author Erik Runyon
- * Updated 2016-06-03
+ * Updated 2020-09-24 SMM
  * Requires site.css
  * Inspired by https://gist.github.com/davatron5000/e9ef20f1d2ba4d9099711064c644d155
  */
@@ -32,6 +32,7 @@ function fitEmbed(embeds){
     divOuter.appendChild(divInner);
 
     embed.parentNode.replaceChild(divOuter, embed);
+    parentDiv.style.width = width + 'px';
     divInner.appendChild(embed);
   }
 }
@@ -49,7 +50,7 @@ if(embeds.length) {
 /*!
  * Video Placeholder
  * @author Erik Runyon
- * Updated 2017-10-23
+ * Updated 2020-09-24 SMM
  */
 document.addEventListener('DOMContentLoaded', function(){
   document.body.querySelectorAll('.video').forEach(function(item) {
@@ -73,10 +74,12 @@ document.addEventListener('DOMContentLoaded', function(){
         h = Math.floor(w * ratio),
         href = el.getAttribute('href'),
         service = (href.indexOf('vimeo') >= 0) ? 'vimeo' : 'youtube',
-        baseurl = (service == 'youtube') ? 'https://www.youtube.com/embed/' : 'https://player.vimeo.com/video/',
+        baseurl = (service == 'youtube') ? 'https://www.youtube-nocookie.com/embed/' : 'https://player.vimeo.com/video/',
         id = (service == 'youtube') ? getURLParameter('v', href) : href.split('/').pop()
     ;
     try { ga('send', 'event', 'Play Video', href); } catch(err) {}
+    if (el.classList.contains('lightbox')) return;
+
     el.parentNode.innerHTML = '<iframe data-init="false" width="' + w + '" height="' + h + '" frameborder="0" src="' + baseurl + id + '?autoplay=1&amp;rel=0&amp;wmode=transparent&amp;vq=hd720" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
     fitEmbed(document.querySelectorAll('iframe[data-init="false"]'));
     document.querySelectorAll('iframe[data-init="false"]')[0].setAttribute('data-init', true);
