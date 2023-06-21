@@ -5,35 +5,15 @@
 
 /*!
  * Responsive wrapper embeds, iframes, etc
- * @author Erik Runyon
- * Updated 2020-09-24 SMM
- * Requires site.css
- * Inspired by https://gist.github.com/davatron5000/e9ef20f1d2ba4d9099711064c644d155
+ * v2023-05-01
  */
 function fitEmbed(embeds){
   for(var i=0; i<embeds.length; i++) {
     var embed = embeds[i],
         width = embed.getAttribute('width'),
-        height = embed.getAttribute('height'),
-        aspectRatio = height/width,
-        parentDiv = embed.parentNode,
-        divOuter = document.createElement('div'),
-        divInner = document.createElement('div')
+        height = embed.getAttribute('height')
     ;
-
-    embed.removeAttribute('height');
-    embed.removeAttribute('width');
-
-    // Prevents the embed from exceeding the intial width
-    divOuter.className = 'embed-outer';
-    divOuter.style.maxWidth = width + 'px';
-    divInner.className = 'embed-inner';
-    divInner.style.paddingBottom = aspectRatio * 100 + '%';
-    divOuter.appendChild(divInner);
-
-    embed.parentNode.replaceChild(divOuter, embed);
-    parentDiv.style.width = width + 'px';
-    divInner.appendChild(embed);
+    embed.style.aspectRatio = `${width} / ${height}`;
   }
 }
 var sources = [
@@ -49,11 +29,12 @@ if(embeds.length) {
 
 /*!
  * Video Placeholder
- * @author Erik Runyon
- * Updated 2020-09-24 SMM
+ * Uses a link with the class `video` and a child image
+ * <a class="video" href="https://www.youtube.com/watch?v=YTID"><img src="..."></a>
+ * v2023-05-030
  */
-document.addEventListener('DOMContentLoaded', function(){
-  document.body.querySelectorAll('.video').forEach(function(item) {
+(function(){
+  forEach(document.body.querySelectorAll('.video'), function(index, item) {
     var video = item,
         play_button = document.createElement('div')
     ;
@@ -65,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function loadVideo(e){
     e.preventDefault();
+    if(this.classList.contains('lightbox')) return;
 
     var el = this,
         ww = window.innerWidth,
@@ -75,13 +57,11 @@ document.addEventListener('DOMContentLoaded', function(){
         href = el.getAttribute('href'),
         service = (href.indexOf('vimeo') >= 0) ? 'vimeo' : 'youtube',
         baseurl = (service == 'youtube') ? 'https://www.youtube-nocookie.com/embed/' : 'https://player.vimeo.com/video/',
-        id = (service == 'youtube') ? getURLParameter('v', href) : href.split('/').pop()
+        id = (service == 'youtube') ? getURLParameter('v', href) : href.split('/').pop(),
+        t = getURLParameter('t', href),
+        timestamp = (t) ? `&amp;start=${t}` : ''
     ;
-    try { ga('send', 'event', 'Play Video', href); } catch(err) {}
-    if (el.classList.contains('lightbox')) return;
 
-    el.parentNode.innerHTML = '<iframe data-init="false" width="' + w + '" height="' + h + '" frameborder="0" src="' + baseurl + id + '?autoplay=1&amp;rel=0&amp;wmode=transparent&amp;vq=hd720" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
-    fitEmbed(document.querySelectorAll('iframe[data-init="false"]'));
-    document.querySelectorAll('iframe[data-init="false"]')[0].setAttribute('data-init', true);
+    el.parentNode.innerHTML = `<iframe data-init="false" width="${w}" height="${h}" frameborder="0" src="${baseurl + id}?autoplay=1&amp;rel=0&amp;wmode=transparent&amp;vq=hd720&amp;enablejsapi=1${timestamp}" webkitallowfullscreen mozallowfullscreen allowfullscreen style="aspect-ratio:${w}/${h}"></iframe>`;
   }
-});
+})();
